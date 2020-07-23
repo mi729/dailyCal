@@ -13,14 +13,15 @@ import GoogleAPIClientForREST
 class ViewController: UIViewController {
     
     @IBAction func logInButtonDidTap(_ sender: Any) {
-        // デリゲートを設定
         GIDSignIn.sharedInstance()?.delegate = self
-        
         // ログイン画面の表示元を設定
         GIDSignIn.sharedInstance()?.presentingViewController = self
-
-        // ログインを実行
-        GIDSignIn.sharedInstance()?.signIn()
+        
+        if GIDSignIn.sharedInstance()!.hasPreviousSignIn() {
+            GIDSignIn.sharedInstance()!.restorePreviousSignIn()
+        } else {
+            GIDSignIn.sharedInstance()?.signIn()
+        }
     }
     @IBOutlet weak var yearMonthLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -38,6 +39,11 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let user = GIDSignIn.sharedInstance()?.currentUser {
+            print("currentUser.profile.email: \(user.profile!.email!)")
+        } else {
+            print("currentUser is nil")
+        }
         
         let f = DateFormatter()
         f.setTemplate(.yearMonth)
@@ -93,14 +99,11 @@ extension DateFormatter {
     }
 }
 
-// GIDSignInDelegateへの適合とメソッドの追加を行う
 extension ViewController: GIDSignInDelegate {
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if error == nil {
-            // ログイン成功した場合
             print("signIned user email: \(user!.profile!.email!)")
         } else {
-            // ログイン失敗した場合
             print("error: \(error!.localizedDescription)")
         }
     }
