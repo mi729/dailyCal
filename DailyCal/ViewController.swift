@@ -7,9 +7,21 @@
 //
 
 import UIKit
+import GoogleSignIn
+import GoogleAPIClientForREST
 
 class ViewController: UIViewController {
+    
+    @IBAction func logInButtonDidTap(_ sender: Any) {
+        // デリゲートを設定
+        GIDSignIn.sharedInstance()?.delegate = self
+        
+        // ログイン画面の表示元を設定
+        GIDSignIn.sharedInstance()?.presentingViewController = self
 
+        // ログインを実行
+        GIDSignIn.sharedInstance()?.signIn()
+    }
     @IBOutlet weak var yearMonthLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var dayLabel: UILabel!
@@ -46,7 +58,6 @@ class ViewController: UIViewController {
     }
 }
 
-
 // MARK: - UITableViewDelegate,UITableViewDataSource
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -79,5 +90,18 @@ extension DateFormatter {
 
     func setTemplate(_ template: Template) {
         dateFormat = DateFormatter.dateFormat(fromTemplate: template.rawValue, options: 0, locale: Locale.current)
+    }
+}
+
+// GIDSignInDelegateへの適合とメソッドの追加を行う
+extension ViewController: GIDSignInDelegate {
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if error == nil {
+            // ログイン成功した場合
+            print("signIned user email: \(user!.profile!.email!)")
+        } else {
+            // ログイン失敗した場合
+            print("error: \(error!.localizedDescription)")
+        }
     }
 }

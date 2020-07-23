@@ -1,0 +1,6 @@
+framework module Pods_DailyCal {
+  umbrella header "Pods-DailyCal-umbrella.h"
+
+  export *
+  module * { export * }
+}
