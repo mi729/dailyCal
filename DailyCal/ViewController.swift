@@ -11,7 +11,7 @@ import EventKit
 import GoogleSignIn
 import GoogleAPIClientForREST
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDataSource {
     
     @IBAction func logInButtonDidTap(_ sender: Any) {
         if isAuthorized(status) {
@@ -51,7 +51,7 @@ class ViewController: UIViewController {
         checkAuth()
     }
 
-    func setLabelText() {
+    private func setLabelText() {
         let f = DateFormatter()
         f.setTemplate(.yearMonth)
         let currentYearMonth = f.string(from: today)
@@ -67,7 +67,7 @@ class ViewController: UIViewController {
         dayLabel.text = currentDay
     }
 
-    func getEvents(_ date: Date) {
+    private func getEvents(_ date: Date) {
         let predicate = eventStore.predicateForEvents(withStart: date, end: date, calendars: nil)
         eventArray = eventStore.events(matching: predicate)
         print(eventArray)
@@ -76,7 +76,7 @@ class ViewController: UIViewController {
         }
     }
         
-    func checkAuth() {
+    private func checkAuth() {
         if isAuthorized(status) {
             getEvents(today)
             return
@@ -91,7 +91,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func dialogAuthorized() {
+    private func dialogAuthorized() {
         let dialog = UIAlertController(title: "カレンダーは連携済みです", message: "", preferredStyle: .alert)
         dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(dialog, animated: true, completion: {
@@ -100,7 +100,8 @@ class ViewController: UIViewController {
             }
         })
     }
-    func dialogLinkCal() {
+
+    private func dialogLinkCal() {
         let dialog = UIAlertController(title: "カレンダーを連携する", message: "設定アプリを開いてカレンダーを連携しますか？", preferredStyle: .alert)
         dialog.addAction(UIAlertAction(title: "「設定」を開く", style: .default, handler: { action in
             let url = URL(string: "app-settings:root=General&path=com.118neko.DailyCal")
@@ -108,24 +109,5 @@ class ViewController: UIViewController {
         }))
         dialog.addAction(UIAlertAction(title: "キャンセル", style: .cancel, handler: nil))
         self.present(dialog, animated: true, completion: nil)
-    }
-}
-
-// MARK: - UITableViewDelegate,UITableViewDataSource
-
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return eventArray.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "tableCell") as! TableViewCell
-        cell.event = eventArray[indexPath.row]
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
     }
 }
