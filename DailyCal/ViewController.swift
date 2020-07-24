@@ -7,21 +7,14 @@
 //
 
 import UIKit
+import EventKit
 import GoogleSignIn
 import GoogleAPIClientForREST
 
 class ViewController: UIViewController {
     
     @IBAction func logInButtonDidTap(_ sender: Any) {
-        GIDSignIn.sharedInstance()?.delegate = self
-        // ログイン画面の表示元を設定
-        GIDSignIn.sharedInstance()?.presentingViewController = self
         
-        if GIDSignIn.sharedInstance()!.hasPreviousSignIn() {
-            GIDSignIn.sharedInstance()!.restorePreviousSignIn()
-        } else {
-            GIDSignIn.sharedInstance()?.signIn()
-        }
     }
     @IBOutlet weak var yearMonthLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -35,19 +28,21 @@ class ViewController: UIViewController {
            }
        }
     
-    var schedule:[String]!
-    
+    var eventStore = EKEventStore()
+    let calendar = Calendar.current
+    let today = Date()
+    var eventArray: [EKEvent] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let user = GIDSignIn.sharedInstance()?.currentUser {
-            print("currentUser.profile.email: \(user.profile!.email!)")
-        } else {
-            print("currentUser is nil")
-        }
-        
+        tableView.dataSource = self
+        setLabelText()
+        checkAuth()
+    }
+
+    func setLabelText() {
         let f = DateFormatter()
         f.setTemplate(.yearMonth)
-        let today = Date()
         let currentYearMonth = f.string(from: today)
         
         f.setTemplate(.date)
@@ -55,12 +50,35 @@ class ViewController: UIViewController {
         
         f.setTemplate(.weekDay)
         let currentDay = f.string(from: today)
-
+        
         yearMonthLabel.text = "\(currentYearMonth)"
         dateLabel.text = currentDate
         dayLabel.text = currentDay
+    }
 
-        schedule = ["FakeMotion CD発売日", "星名‪美怜‬誕生日", "コニファーライブ配信"]
+    func getEvents(_ date: Date) {
+        let predicate = eventStore.predicateForEvents(withStart: date, end: date, calendars: nil)
+        eventArray = eventStore.events(matching: predicate)
+        print(eventArray)
+        DispatchQueue.main.async {
+                self.tableView.reloadData()
+        }
+    }
+        
+    func checkAuth() {
+        let status = EKEventStore.authorizationStatus(for: EKEntityType.event)
+        if status == .authorized {
+            getEvents(today)
+            return
+        }
+        if status == .notDetermined {
+            eventStore.requestAccess(to: EKEntityType.event) { (granted, error) in
+                guard granted else {
+                    return
+                }
+                self.getEvents(self.today)
+            }
+        }
     }
 }
 
@@ -69,16 +87,13 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return schedule.count
+        return eventArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let device = bluetoothService.peripherals[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "tableCell") as! TableViewCell
-//        cell.backgroundColor = UIColor.clear
-//        cell.connectButton.tag = indexPath.row
-//
-        cell.setData(color: .blue, titleText: schedule[indexPath.row])
+        let eventColor = UIColor(cgColor: eventArray[indexPath.row].calendar.cgColor)
+        cell.setData(color: eventColor, titleText: eventArray[indexPath.row].title)
         return cell
     }
     
@@ -96,15 +111,5 @@ extension DateFormatter {
 
     func setTemplate(_ template: Template) {
         dateFormat = DateFormatter.dateFormat(fromTemplate: template.rawValue, options: 0, locale: Locale.current)
-    }
-}
-
-extension ViewController: GIDSignInDelegate {
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        if error == nil {
-            print("signIned user email: \(user!.profile!.email!)")
-        } else {
-            print("error: \(error!.localizedDescription)")
-        }
     }
 }

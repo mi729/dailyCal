@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		217476CAA31A6355A0DC2F3E /* Pods_DailyCal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 354EDE2481E37E173DDB2721 /* Pods_DailyCal.framework */; };
+		6719489324CAD34700C3F5A6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 6719489224CAD34700C3F5A6 /* README.md */; };
 		67D6497D24669010002EA505 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D6497C24669010002EA505 /* AppDelegate.swift */; };
 		67D6497F24669010002EA505 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D6497E24669010002EA505 /* SceneDelegate.swift */; };
 		67D6498124669010002EA505 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D6498024669010002EA505 /* ViewController.swift */; };
@@ -22,6 +23,7 @@
 		106725485CA4490C83A41934 /* Pods-DailyCal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DailyCal.release.xcconfig"; path = "Target Support Files/Pods-DailyCal/Pods-DailyCal.release.xcconfig"; sourceTree = "<group>"; };
 		1D45520BA290594DFA3FE652 /* Pods-DailyCal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DailyCal.debug.xcconfig"; path = "Target Support Files/Pods-DailyCal/Pods-DailyCal.debug.xcconfig"; sourceTree = "<group>"; };
 		354EDE2481E37E173DDB2721 /* Pods_DailyCal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DailyCal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6719489224CAD34700C3F5A6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		67D6497924669010002EA505 /* DailyCal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailyCal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		67D6497C24669010002EA505 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		67D6497E24669010002EA505 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 		67D6497024669010002EA505 = {
 			isa = PBXGroup;
 			children = (
+				6719489224CAD34700C3F5A6 /* README.md */,
 				67D6497B24669010002EA505 /* DailyCal */,
 				67D6497A24669010002EA505 /* Products */,
 				0944AE1A09B8CD2C30D456E0 /* Pods */,
@@ -168,6 +171,7 @@
 			files = (
 				67D6498924669011002EA505 /* LaunchScreen.storyboard in Resources */,
 				67D64991246698D3002EA505 /* TableViewCell.xib in Resources */,
+				6719489324CAD34700C3F5A6 /* README.md in Resources */,
 				67D6498624669011002EA505 /* Assets.xcassets in Resources */,
 				67D6498424669010002EA505 /* Main.storyboard in Resources */,
 			);
