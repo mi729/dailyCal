@@ -14,7 +14,11 @@ import GoogleAPIClientForREST
 class ViewController: UIViewController {
     
     @IBAction func logInButtonDidTap(_ sender: Any) {
-        
+        if isAuthorized(status) {
+            dialogAuthorized()
+        } else {
+            dialogLinkCal()
+        }
     }
     @IBOutlet weak var yearMonthLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -28,11 +32,18 @@ class ViewController: UIViewController {
            }
        }
     
-    var eventStore = EKEventStore()
     let calendar = Calendar.current
+    let status = EKEventStore.authorizationStatus(for: EKEntityType.event)
     let today = Date()
+    var eventStore = EKEventStore()
     var eventArray: [EKEvent] = []
-
+    var isAuthorized = { (status: EKAuthorizationStatus) -> Bool in
+        if status == .authorized {
+            return true
+        }
+        return false
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -66,8 +77,7 @@ class ViewController: UIViewController {
     }
         
     func checkAuth() {
-        let status = EKEventStore.authorizationStatus(for: EKEntityType.event)
-        if status == .authorized {
+        if isAuthorized(status) {
             getEvents(today)
             return
         }
@@ -79,6 +89,25 @@ class ViewController: UIViewController {
                 self.getEvents(self.today)
             }
         }
+    }
+    
+    func dialogAuthorized() {
+        let dialog = UIAlertController(title: "カレンダーは連携済みです", message: "", preferredStyle: .alert)
+        dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(dialog, animated: true, completion: {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        })
+    }
+    func dialogLinkCal() {
+        let dialog = UIAlertController(title: "カレンダーを連携する", message: "設定アプリを開いてカレンダーを連携しますか？", preferredStyle: .alert)
+        dialog.addAction(UIAlertAction(title: "「設定」を開く", style: .default, handler: { action in
+            let url = URL(string: "app-settings:root=General&path=com.118neko.DailyCal")
+            UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+        }))
+        dialog.addAction(UIAlertAction(title: "キャンセル", style: .cancel, handler: nil))
+        self.present(dialog, animated: true, completion: nil)
     }
 }
 
@@ -92,24 +121,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "tableCell") as! TableViewCell
-        let eventColor = UIColor(cgColor: eventArray[indexPath.row].calendar.cgColor)
-        cell.setData(color: eventColor, titleText: eventArray[indexPath.row].title)
+        cell.event = eventArray[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
-    }
-
-}
-extension DateFormatter {
-    enum Template: String {
-        case yearMonth = "yM"
-        case date = "d"
-        case weekDay = "EE"
-    }
-
-    func setTemplate(_ template: Template) {
-        dateFormat = DateFormatter.dateFormat(fromTemplate: template.rawValue, options: 0, locale: Locale.current)
     }
 }
