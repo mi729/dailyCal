@@ -8,16 +8,19 @@
 
 import UIKit
 import EventKit
-import GoogleSignIn
-import GoogleAPIClientForREST
 
-class ViewController: UIViewController, UITableViewDataSource {
+class ViewController: UIViewController {
     
     @IBAction func logInButtonDidTap(_ sender: Any) {
         if isAuthorized(status) {
             dialogAuthorized()
         } else {
             dialogLinkCal()
+        }
+    }
+    @IBOutlet weak var loginButton: UIButton! {
+        didSet {
+            loginButton.contentHorizontalAlignment = .right
         }
     }
     @IBOutlet weak var yearMonthLabel: UILabel!
