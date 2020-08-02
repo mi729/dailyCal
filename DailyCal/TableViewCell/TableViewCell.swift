@@ -33,15 +33,19 @@ class TableViewCell: UITableViewCell {
                 
                 f.setTemplate(.eventDate)
                 let todayString = f.string(from: Date())
+                let startDateString = f.string(from: event.startDate)
                 let endDateString = f.string(from: event.endDate)
                 
-                f.setTemplate(.eventTime)
-                startTime.text = f.string(from: event.startDate)
-                
-                guard todayString == endDateString else {  //正しく動くか確認
+                guard todayString == startDateString else {
+                    startTime.text = "終了"
+                    return
+                }
+                guard todayString == endDateString else {
                     endTime.text = ""
                     return
                 }
+                f.setTemplate(.eventTime)
+                startTime.text = f.string(from: event.startDate)
                 endTime.text = f.string(from: event.endDate)
             }
         }

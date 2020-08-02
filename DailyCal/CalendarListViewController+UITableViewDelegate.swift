@@ -11,13 +11,14 @@ import UIKit
 // MARK: - UITableViewDelegate,UITableViewDataSource
 
 extension CalendarListViewController: UITableViewDelegate, UITableViewDataSource {
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return calendarArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "calendarCell") as! TableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "calendarCell") as! CalendarListTableViewCell
+        cell.calendar = calendarArray[indexPath.row]
         return cell
     }
     

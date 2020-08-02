@@ -11,6 +11,9 @@ import EventKit
 
 class ViewController: UIViewController {
     
+    @IBAction func settingButtonDidTap(_ sender: Any) {
+        performSegue(withIdentifier: "toCalendarList", sender: nil)
+    }
     @IBAction func logInButtonDidTap(_ sender: Any) {
         if isAuthorized(status) {
             dialogAuthorized()
@@ -73,7 +76,6 @@ class ViewController: UIViewController {
     private func getEvents(_ date: Date) {
         let predicate = eventStore.predicateForEvents(withStart: date, end: date, calendars: nil)
         eventArray = eventStore.events(matching: predicate)
-        print(eventArray)
         DispatchQueue.main.async {
                 self.tableView.reloadData()
         }
