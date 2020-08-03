@@ -38,7 +38,8 @@ class ViewController: UIViewController {
            }
        }
     
-    let calendar = Calendar.current
+    let userDefaults = UserDefaults.standard
+    
     let status = EKEventStore.authorizationStatus(for: EKEntityType.event)
     let today = Date()
     var eventStore = EKEventStore()
@@ -76,6 +77,8 @@ class ViewController: UIViewController {
     private func getEvents(_ date: Date) {
         let predicate = eventStore.predicateForEvents(withStart: date, end: date, calendars: nil)
         eventArray = eventStore.events(matching: predicate)
+        //filter events
+//        eventArray.filter { userDefaults.dictionary(forKey: "\($0.calendar.title)") as? Bool == true }
         DispatchQueue.main.async {
                 self.tableView.reloadData()
         }

@@ -17,7 +17,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="tru-qV-BE6">
-                        <rect key="frame" x="20" y="0.0" width="140" height="44"/>
+                        <rect key="frame" x="30" y="0.0" width="140" height="44"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v26-VD-H7O">
                                 <rect key="frame" x="0.0" y="16" width="26.5" height="12"/>
@@ -33,22 +33,11 @@
                             </label>
                         </subviews>
                     </stackView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Qno-Fw-l9L">
-                        <rect key="frame" x="280" y="9" width="20" height="26.5"/>
-                        <color key="tintColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="20" id="f0N-v7-08s"/>
-                            <constraint firstAttribute="height" constant="30" id="hzb-BZ-jIf"/>
-                        </constraints>
-                    </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="Qno-Fw-l9L" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="9SP-th-yKV"/>
-                    <constraint firstItem="Qno-Fw-l9L" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="tru-qV-BE6" secondAttribute="trailing" constant="10" id="BrO-I4-8nT"/>
                     <constraint firstItem="tru-qV-BE6" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="CLm-20-5Ql"/>
                     <constraint firstAttribute="bottom" secondItem="tru-qV-BE6" secondAttribute="bottom" id="ZCF-DZ-s6f"/>
-                    <constraint firstItem="tru-qV-BE6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="iDf-RD-21u"/>
-                    <constraint firstAttribute="trailing" secondItem="Qno-Fw-l9L" secondAttribute="trailing" constant="20" id="sM3-Wq-40r"/>
+                    <constraint firstItem="tru-qV-BE6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="30" id="iDf-RD-21u"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -59,7 +48,4 @@
             <point key="canvasLocation" x="137.68115942028987" y="119.86607142857142"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="checkmark" catalog="system" width="128" height="114"/>
-    </resources>
 </document>

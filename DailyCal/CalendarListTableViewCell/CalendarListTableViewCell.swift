@@ -15,12 +15,10 @@ class CalendarListTableViewCell: UITableViewCell {
         }
     }
     @IBOutlet weak var calendarName: UILabel!
-    
     var calendar: EKCalendar! {
         didSet {
             circleLabel.textColor = UIColor(cgColor: calendar.cgColor)
             calendarName.text = calendar.title
-            
         }
     }
     
@@ -30,9 +28,7 @@ class CalendarListTableViewCell: UITableViewCell {
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+//        super.setSelected(selected, animated: animated)
     }
     
 }
