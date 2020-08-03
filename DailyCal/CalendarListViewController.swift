@@ -20,6 +20,8 @@ class CalendarListViewController: UIViewController {
     }
     var calendarArray = EKEventStore().calendars(for: .event)
     var checkMarkArray: [Bool] = []
+    var calendarTitleArray: [String] = []
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,9 +31,18 @@ class CalendarListViewController: UIViewController {
             for _ in 0 ... calendarArray.count - 1 {
                 checkMarkArray.append(true)
             }
-            UserDefaults.standard.set(checkMarkArray, forKey: "checkmarkarray")
+            defaults.set(checkMarkArray, forKey: "checkmarkarray")
         } else {
-            checkMarkArray = UserDefaults.standard.array(forKey: "checkmarkarray") as! [Bool]
+            checkMarkArray = defaults.array(forKey: "checkmarkarray") as! [Bool]
+        }
+        
+        if defaults.array(forKey: "calendarstring") == nil {
+            for i in 0 ... calendarArray.count - 1 {
+                calendarTitleArray.append("\(calendarArray[i].title)")
+            }
+            defaults.set(calendarTitleArray, forKey: "calendarstring")
+        } else {
+            calendarTitleArray = defaults.array(forKey: "calendarstring") as! [String]
         }
     }
     
@@ -40,10 +51,14 @@ class CalendarListViewController: UIViewController {
     }
 
 
-    func changeBool(value: Bool) -> Bool {
+    func changeBool(value: Bool, row: Int) -> Bool {
         if value == true {
+            calendarTitleArray.remove(at: row)
+            defaults.set(calendarTitleArray, forKey: "calendarstring")
             return false
         } else {
+            let calendarTitle = calendarArray[row].title
+            calendarTitleArray.append(calendarTitle)
             return true
         }
     }

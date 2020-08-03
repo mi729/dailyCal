@@ -33,7 +33,7 @@ extension CalendarListViewController: UITableViewDelegate, UITableViewDataSource
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        checkMarkArray[indexPath.row] = changeBool(value: checkMarkArray[indexPath.row])
+        checkMarkArray[indexPath.row] = changeBool(value: checkMarkArray[indexPath.row], row: indexPath.row)
         UserDefaults.standard.set(checkMarkArray, forKey: "checkmarkarray")
         
 //        let cell = self.calendarTableVIew.cellForRow(at: indexPath) as! CalendarListTableViewCell
