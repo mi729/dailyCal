@@ -18,14 +18,18 @@ class CalendarListViewController: UIViewController {
             calendarTableVIew.allowsMultipleSelection = false
         }
     }
-    var calendarArray = EKEventStore().calendars(for: .event)
+    var calendarArray = EKEventStore().calendars(for: .event).sorted(by: { aCal, bCal -> Bool in
+            if aCal.title < bCal.title {
+                return true
+            }
+            return false
+        })
     var checkMarkArray: [Bool] = []
     var calendarTitleArray: [String] = []
     let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        dump(calendarArray)
 
         if UserDefaults.standard.array(forKey: "checkmarkarray") == nil {
             for _ in 0 ... calendarArray.count - 1 {
@@ -52,12 +56,14 @@ class CalendarListViewController: UIViewController {
 
 
     func changeBool(value: Bool, row: Int) -> Bool {
+        let calendarTitle = calendarArray[row].title
         if value == true {
-            calendarTitleArray.remove(at: row)
+            if let index = calendarTitleArray.firstIndex(of: calendarTitle) {
+                calendarTitleArray.remove(at: index)
+            }
             defaults.set(calendarTitleArray, forKey: "calendarstring")
             return false
         } else {
-            let calendarTitle = calendarArray[row].title
             calendarTitleArray.append(calendarTitle)
             return true
         }

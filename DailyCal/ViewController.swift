@@ -45,13 +45,14 @@ class ViewController: UIViewController {
     var eventStore = EKEventStore()
     var eventArray: [EKEvent] = []
     
-    var calendarArray = EKEventStore().calendars(for: .event)
     var calendarTitleArray: [String] = []
     
     var isAuthorized = { (status: EKAuthorizationStatus) -> Bool in
         if status == .authorized {
+            print("Authorized")
             return true
         }
+        print("denided")
         return false
     }
     
@@ -87,6 +88,7 @@ class ViewController: UIViewController {
 
     private func getEvents(_ date: Date) {
         let predicate = eventStore.predicateForEvents(withStart: date, end: date, calendars: nil)
+        let calendarArray = EKEventStore().calendars(for: .event)
         if defaults.array(forKey: "calendarstring") == nil {
             for i in 0 ... calendarArray.count - 1 {
                 calendarTitleArray.append("\(calendarArray[i].title)")
@@ -96,13 +98,15 @@ class ViewController: UIViewController {
             calendarTitleArray = defaults.array(forKey: "calendarstring") as! [String]
         }
         
-        let getCalendarStrings: [String] = defaults.array(forKey: "calendarstring") as! [String]
+//        let getCalendarStrings: [String] = defaults.array(forKey: "calendarstring") as! [String]
         eventArray = eventStore.events(matching: predicate)
-            .filter { getCalendarStrings.contains("\($0.calendar.title)") }
+            .filter { calendarTitleArray.contains("\($0.calendar.title)") }
         
         DispatchQueue.main.async {
                 self.tableView.reloadData()
         }
+        print(calendarTitleArray)
+        dump(eventArray)
     }
         
     private func checkAuth() {
@@ -124,6 +128,7 @@ class ViewController: UIViewController {
         let dialog = UIAlertController(title: "カレンダーは連携済みです", message: "", preferredStyle: .alert)
         dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(dialog, animated: true, completion: {
+            self.getEvents(self.today)
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -139,4 +144,11 @@ class ViewController: UIViewController {
         dialog.addAction(UIAlertAction(title: "キャンセル", style: .cancel, handler: nil))
         self.present(dialog, animated: true, completion: nil)
     }
+}
+
+extension ViewController: UIAdaptivePresentationControllerDelegate {
+  func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+      getEvents(today)
+//    updateView()
+  }
 }
