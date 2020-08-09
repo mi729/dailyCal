@@ -7,7 +7,7 @@
 
 ## Requirements
 
-- iOS 13.1+
+- iOS 13.1+
 - Xcode 11.6+
 
 Nyago – [@nya\_\_str](https://twitter.com/nya__str) – triangle118neko@gmail.com
